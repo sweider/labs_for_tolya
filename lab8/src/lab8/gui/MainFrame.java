@@ -10,19 +10,22 @@ import lab8.logic.JournalRecordsController;
 
 /**
  *
- * @author alex
+ * Главное окно приложения. 
+ * Показывает в таблице уже сохраненные записи. Содержит контролы для добавления записи и закрытия.
+ * Содержимое этого файла наполовину сгенерированно NetBeans-ом через гуевый редактор и меняться должно через него же.
  */
 public class MainFrame extends javax.swing.JFrame {
     private final JournalRecordsController controller;
     private final JTableModel tableModel;
+    
     /**
      * Creates new form MainFrame
+     * @param controller контроллер журнала поставок
      */
-    public MainFrame(JournalRecordsController controller) throws NoSuchMethodException {
+    public MainFrame(JournalRecordsController controller) {
         this.controller = controller;
-        this.tableModel = new JTableModel(controller.getRecords());
+        this.tableModel = this.controller.getTableModel();
         initComponents();
-        this.controller.setTableFrame(this);
         this.setLocationRelativeTo(null);
     }
 
@@ -41,6 +44,7 @@ public class MainFrame extends javax.swing.JFrame {
         closeButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("SwingLab");
 
         recordsTable.setModel(this.tableModel);
         tableWrapper.setViewportView(recordsTable);
@@ -93,11 +97,17 @@ public class MainFrame extends javax.swing.JFrame {
         new NewRecordDialog(this, true, controller).setVisible(true);
     }//GEN-LAST:event_addButtonActionPerformed
 
+    /**
+     * Обработчик кнопки закрытия. 
+     * Тупо вызывает закрытие формы.
+     * так как форма одна на все приложение и не создаются дополнительные потоки -- закрывается все приложение.
+     * @param evt 
+     */
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         this.dispose();
     }//GEN-LAST:event_closeButtonActionPerformed
-
-
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton closeButton;

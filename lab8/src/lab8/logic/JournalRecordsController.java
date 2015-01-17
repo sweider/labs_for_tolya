@@ -9,26 +9,48 @@ package lab8.logic;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Date;
-import java.util.List;
-import javax.swing.JFrame;
 import javax.xml.bind.JAXBException;
+import lab8.Helper;
+import lab8.gui.JTableModel;
 
 /**
- *
- * @author alex
+ * Контроллер записей поставок.
+ * Инкупсулирует в себе все, что связано с изменением журнала поставок, включая сохранение их на диске.
+ * Использует дефолтный конструктор.
+ * Содержит в себе ссылку на 
  */
 public class JournalRecordsController {
-    private final static String PATH_TO_FILE = Paths.get("").toAbsolutePath().toString() + File.separator + "records_storage.xml";
     private RecordsStorage storage;
-    private JFrame mainFrame;
+    private JTableModel tableModel;
 
-    public JournalRecordsController() {
+    public JournalRecordsController() throws NoSuchMethodException {
+        this.loadRecords();        
+        this.tableModel = new JTableModel(this.storage.getAllRecords());
     }
-
-    public void loadRecords() {
-        File file = new File(PATH_TO_FILE);
+    
+    public void addRecord(String product, int count, Date date){
+        JournalRecord record = new JournalRecord(product, date, count);
+        this.storage.addRecord(record);
+        this.saveToDisk();
+        this.tableModel.fireTableDataChanged();
+    }
+    
+    /**
+     * Метод, отдающий гуевой части tableModel
+     * @return 
+     */
+    public JTableModel getTableModel(){
+        return this.tableModel;
+    }
+    
+    /**
+     * Подгружаем с диска нашу хранилку.
+     * Проверяем есть ли файл. Если есть - грузим с него.
+     * Если файла нет - создаем новую пустую хранилку.
+     */
+    private void loadRecords() {
+        File file = new File(Helper.PATH_TO_FILE);
         if(file.exists()){
             try {
                 this.storage = RecordsStorage.loadFromFile(file);
@@ -43,24 +65,13 @@ public class JournalRecordsController {
         }
     }
     
-    public void addRecord(String product, int count, Date date){
-        JournalRecord record = new JournalRecord(product, date, count);
-        this.storage.addRecord(record);
-        this.saveToDisk();
-        this.mainFrame.revalidate();
-        this.mainFrame.repaint();
-    }
-    
-    public List<JournalRecord> getRecords(){
-        return this.storage.getAllRecords();
-    }
-    
-    public void setTableFrame(JFrame frame){
-        this.mainFrame = frame;
-    }
-    
+    /**
+     * Сохраняем все на диск.
+     * Проверяем есть ли файл. Если нет - создаем.
+     * Когда файл точно есть -- отдаем его в качестве параметра для сохранения в хранилку.
+     */
     private void saveToDisk(){
-        File file = new File(PATH_TO_FILE);
+        File file = new File(Helper.PATH_TO_FILE);
         if(!file.exists()){
             try {
                 Files.createFile(file.toPath());

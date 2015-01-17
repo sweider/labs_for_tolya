@@ -7,14 +7,15 @@
 package lab8.gui;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import lab8.Helper;
 import lab8.logic.JournalRecordsController;
 
 /**
- *
+ * Диалоговое окно для создания новой записи о поставке.
+ * Инициализируется контроллером, чтобы знать, а куда вообще полученные данные передавать.
+ * Является модальным.
  *
  */
 public class NewRecordDialog extends javax.swing.JDialog {
@@ -48,6 +49,7 @@ public class NewRecordDialog extends javax.swing.JDialog {
         addButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("New product");
 
         productLabel.setText("Product:");
 
@@ -103,6 +105,13 @@ public class NewRecordDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Обработчик кнопки Add.
+     * Проверяет контролы на пустоту и на соответствие принятому формату.
+     * Если есть ошибки -- сообщает.
+     * Если нет -- отдает данные в контроллер и закрывается
+     * @param evt 
+     */
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         try {
             String productString = this.productField.getText();
@@ -124,10 +133,13 @@ public class NewRecordDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_addButtonActionPerformed
 
+    /**
+     * Показывает сообщение об ошибке
+     */
     private void showErrorMsg(){
         JOptionPane.showMessageDialog(this, "Some of fields doesn't filled rigth.\n"
-                + "Note that all field should be setted, count field\n"
-                + "should contain integer number & date must be in format"
+                + "Note that all field should be setted, count field\n" 
+                + "should contain integer number & date must be in format\n"
                 + "dd/MM/yyyy!","Error", JOptionPane.ERROR_MESSAGE);
     }
 

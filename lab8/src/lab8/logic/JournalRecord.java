@@ -13,8 +13,9 @@ import javax.xml.bind.annotation.XmlElement;
 import lab8.Helper;
 
 /**
- * Класс аннотирован для того, чтобы JAXB мог аккуратно его сериализовать в xml
- * 
+ * Класс, представляющий собой запись журнала поставок.
+ * Дает инфу о том ЧТО поставили, КОГДА поставили и СКОЛЬКО_ШТУК
+ * Класс аннотирован для того, чтобы JAXB мог аккуратно его сериализовать в xml. * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class JournalRecord {
@@ -45,6 +46,10 @@ public class JournalRecord {
         return count;
     }
     
+    /**
+     * Метод предназначенный для красивового вывода даты в таблице.
+     * @return 
+     */
     public String getFormattedDate(){
         return Helper.DATE_FORMAT.format(this.date);
     }
